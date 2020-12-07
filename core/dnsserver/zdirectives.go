@@ -30,6 +30,8 @@ var Directives = []string{
 	"iplookup",
 	"loadbalance",
 	"cache",
+	"domainreport",
+	"iplookup",
 	"rewrite",
 	"dnssec",
 	"autopath",

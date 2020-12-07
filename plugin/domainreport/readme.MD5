@@ -1,0 +1,19 @@
+# Winston Domain Reporting service
+
+This plugin reports every domain that was queried back to a websocket listener running on the Winston firmware.
+The firmware uses this to modify the underlying iptables rules to intercept suspicious or blocked domains.
+
+Example:
+
+```
+    ws://localhost:8897
+    {"host": "microsoft.com"}
+```
+
+1. Modify Corefile with the following stanza
+
+```
+domainreport {
+     port :8897
+}
+```
