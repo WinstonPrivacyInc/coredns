@@ -97,26 +97,30 @@ func (ir *DomainReport) ConnectionManager() {
 	ticker := time.NewTicker(INTERVAL_PERIOD)
 	for {
 		ir.mu.Lock()
+		fmt.Println("[DEBUG] ConnectionManager trying to reconnect...")
 		if ir.conn == nil {
-			fmt.Println("[DEBUG] ConnectionManager trying to reconnect...")
+			fmt.Println("[DEBUG] ConnectionManager: ir.conn was nil...")
 			err := ir.Connect()
 			if err != nil {
 				fmt.Println("[DEBUG] error while trying to reconnect to domain reporting endpoint", err)
-				ir.mu.Unlock()
-				return
+				//ir.mu.Unlock()
+				//return
 			}
-		}
-		// Send dummy message
-		msg := "{\"host\":\"\"}"
-
-		err := ir.conn.WriteMessage(websocket.TextMessage, []byte(msg))
-
-		if err != nil {
-			// Couldn't write. Try again in 15 seconds.
-			ir.conn = nil
-			fmt.Println("[ERROR] while writing message to domain reporting endpoint", err)
 		} else {
-			fmt.Println("[OK] Connection OK")
+			fmt.Println("[WARNING] ConnectionManager: ir.conn was not nil...")
+
+			// Send dummy message
+			msg := "{\"host\":\"\"}"
+
+			err := ir.conn.WriteMessage(websocket.TextMessage, []byte(msg))
+
+			if err != nil {
+				// Couldn't write. Try again in 15 seconds.
+				ir.conn = nil
+				fmt.Println("[ERROR] while writing message to domain reporting endpoint", err)
+			} else {
+				fmt.Println("[OK] Connection OK")
+			}
 		}
 
 		ir.mu.Unlock()
